@@ -18,8 +18,10 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Grant execute permission for gradlew
-        run: chmod +x ./server/gradlew
+        working-directory: server
+        run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./server/gradlew build -x test
+        working-directory: server
+        run: gradlew build -x test
       - name: Move jar to root
         run: mv ./server/build/libs/*.jar ./server.jar

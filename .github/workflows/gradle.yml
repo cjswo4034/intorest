@@ -18,5 +18,4 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Build with Gradle
-        with:
-          run: ./server/gradlew build -x test
+        run: ./server/gradlew build -x test

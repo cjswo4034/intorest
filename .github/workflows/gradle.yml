@@ -49,10 +49,15 @@ jobs:
         run: mv ./server/build/libs/*.jar ./server.jar
 
       - name: Deploy GCP
-        run: gcloud run deploy intorest-vm --source ./server.jar --region asia-northeast3 -y
+        run: |
+          gcloud init
+          cd ./server/src/main/appengine/
+          gcloud app deploy
       #   run: |
       #     gcloud run deploy intorest-vm --source ./server.jar \
       #       --region asia-northeast3 \
       #       --allow-unauthenticated \
       #       --max-instances 1 \
       #       --memory 512M
+
+# https://www.infiproton.com/post/multiple-services-to-deploy-spring-boot-app-in-gcp

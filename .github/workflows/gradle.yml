@@ -43,8 +43,8 @@ jobs:
 
       - name: Deploy GCP
         run: |
-        gcloud run deploy intorest-vm --source ./server.jar \
-          --region asia-northeast3 \
-          --allow-unauthenticated \
-          --max-instances 1 \
-          --memory 512M
+          gcloud run deploy intorest-vm --source ./server.jar \
+            --region asia-northeast3 \
+            --allow-unauthenticated \
+            --max-instances 1 \
+            --memory 512M

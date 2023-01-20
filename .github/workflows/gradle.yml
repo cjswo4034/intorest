@@ -33,11 +33,7 @@ jobs:
       - name: Deploy GCP
         run: gcloud run deploy intorest-vm \
           --source=./server.jar \
-          --runtime=java11 \
-          --quiet \
-          --platform managed \
           --region asia-northeast3 \
           --allow-unauthenticated \
-          --max-instances 3 \
-          --port 8080 \
+          --max-instances 1 \
           --memory 512M

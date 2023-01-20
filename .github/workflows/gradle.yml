@@ -31,7 +31,7 @@ jobs:
       - name: Move jar to root
         run: mv ./server/build/libs/*.jar ./server.jar
       - name: Deploy GCP
-        run: gcloud run deploy $GCP_SERVICE_NAME \
+        run: gcloud run deploy intorest-vm \
           --source=./server.jar \
           --runtime=java11 \
           --quiet \

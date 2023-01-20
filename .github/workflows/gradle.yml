@@ -48,20 +48,8 @@ jobs:
       - name: Move jar to root
         run: mv ./server/build/libs/*.jar ./server.jar
 
-      - run: gcloud --quiet auth configure-docker
-
-      - name: Build
-        run: docker build --tag "intorest/$PROJECT_ID/$GCE_INSTANCE-image:$GITHUB_SHA" .
-
-      - name: Publish
-        run: docker push "intorest/$PROJECT_ID/$GCE_INSTANCE-image:$GITHUB_SHA"
-
-      - name: Deploy
-        run: |-
-          gcloud compute instances update-container "$GCE_INSTANCE" \
-            --zone "$GCE_INSTANCE_ZONE" \
-            --container-image "intorest/$PROJECT_ID/$GCE_INSTANCE-image:$GITHUB_SHA"
-      # - name: Deploy GCP
+      - name: Deploy GCP
+        run: gcloud run deploy intorest-vm --source ./server.jar --region asia-northeast3 -y
       #   run: |
       #     gcloud run deploy intorest-vm --source ./server.jar \
       #       --region asia-northeast3 \

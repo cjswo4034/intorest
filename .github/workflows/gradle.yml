@@ -42,7 +42,8 @@ jobs:
         run: mv ./server/build/libs/*.jar ./server.jar
 
       - name: Deploy GCP
-        run: gcloud run deploy intorest-vm --source ./server.jar \
+        run: |
+        gcloud run deploy intorest-vm --source ./server.jar \
           --region asia-northeast3 \
           --allow-unauthenticated \
           --max-instances 1 \

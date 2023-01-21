@@ -24,9 +24,8 @@ jobs:
 
       - name: Create SA KEY file
         run: |
-          echo 'GCP_SA_KEY'
-          echo '${{ secrets.GCP_SA_KEY }}'
-          cat ./*.json >> ./server/src/main/resources/key.json
+          echo '${{ secrets.GCP_SA_KEY }}' >> ./server/src/main/resources/key.json
+#          cat ./*.json >> ./server/src/main/resources/key.json
 
       - name: Set up JDK 11
         uses: actions/setup-java@v3

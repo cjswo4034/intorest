@@ -52,7 +52,7 @@ jobs:
         run: mv ./server/build/libs/*.jar ./server.jar
         
       - name: Deploy gcp
-        uses: appleboy/scp-action@masterr
+        uses: appleboy/scp-action@master
         with: 
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'

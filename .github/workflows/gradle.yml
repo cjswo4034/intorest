@@ -62,7 +62,7 @@ jobs:
       - name: 'Use gcloud CLI'
         run: |
           touch test.txt
-          gcloud compute scp ./test.txt intorest-vm:~
+          gcloud compute scp --zone='asia-northeast3-a' ./test.txt 'intorest-vm:~'
         
       - name: Run Application
         uses: appleboy/ssh-action@master

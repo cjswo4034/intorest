@@ -59,6 +59,13 @@ jobs:
           key: '${{ secrets.SSH_PUB_KEY }}'
           source: "./server.jar"
           target: "~"
+        
+      - name: Run Application
+        uses: appleboy/ssh-action@master
+        with: 
+          host: '${{ secrets.SSH_HOST }}'
+          username: '${{ secrets.SSH_USERNAME }}'
+          key: '${{ secrets.SSH_PUB_KEY }}'
           script: |
             java -jar server.jar
       

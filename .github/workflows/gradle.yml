@@ -28,13 +28,13 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+#       - name: Set up Cloud SDK
+#         uses: google-github-actions/setup-gcloud@v1
 
       - name: Create SA KEY file
         run: |
-          touch ./server/src/main/resources/key.json
           cp ./*.json ./server/src/main/resources/key.json
+          echo '123123' >> test.txt
 
 #       - name: Set up JDK 11
 #         uses: actions/setup-java@v3
@@ -51,35 +51,28 @@ jobs:
 #       - name: Move jar to root
 #         run: mv ./server/build/libs/*.jar ./server.jar
         
-#       - name: Deploy gcp
-#         uses: appleboy/scp-action@master
-#         with: 
-#           host: '${{ secrets.SSH_HOST }}'
-#           username: '${{ secrets.SSH_USERNAME }}'
-#           key: '${{ secrets.SSH_PUB_KEY }}'
-#           source: "./server.jar"
-#           target: "~"
-      - name: 'Use gcloud CLI'
-        run: |
-          touch test2.txt
-          gcloud compute scp --project='${{ secrets.GCP_PROJECT_ID }}' --zone='asia-northeast3-a' ./test2.txt 'instance-vm:~'
+      - name: Deploy gcp
+        uses: appleboy/scp-action@master
+        with: 
+          host: '${{ secrets.SSH_HOST }}'
+          username: '${{ secrets.SSH_USERNAME }}'
+          key: '${{ secrets.SSH_KEY }}'
+          source: "test.txt"
+          target: "~"
+
+#       - name: 'Use gcloud CLI'
+#         run: |
+#           touch test2.txt
+#           gcloud compute scp --project='${{ secrets.GCP_PROJECT_ID }}' --zone='asia-northeast3-a' ./test2.txt 'instance-vm:~'
         
       - name: Run Application
-#         uses: 'google-github-actions/ssh-compute@v0'
-#         with:
-#          instance_name: 'instance-vm'
-#          zone: 'asia-northeast3-a'
-#          ssh_keys_dir: '~/.ssh'
-#          ssh_private_key: '${{ secrets.SSH_KEY }}'
-#          command: 'java -jar -Dspring.profiles.active=gcs java.jar'
-         
         uses: appleboy/ssh-action@master
         with: 
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           key: '${{ secrets.SSH_KEY }}'
           script: |
-            java -jar -Dspring.profiles.active=gcs java.jar
+            java -jar -Dspring.profiles.active=gcs java.jar &
       
 
 #       - name: Deploy GCP

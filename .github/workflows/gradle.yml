@@ -61,8 +61,8 @@ jobs:
 #           target: "~"
       - name: 'Use gcloud CLI'
         run: |
-          echo 'testfile' >> ./test.txt
-          'gcloud compute scp ./test.txt intorest-vm:~'
+          touch test.txt
+          gcloud compute scp ./test.txt intorest-vm:~
         
       - name: Run Application
         uses: appleboy/ssh-action@master

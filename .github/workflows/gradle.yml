@@ -1,5 +1,3 @@
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
 on:
@@ -14,9 +12,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    env: 
-      CI: false
 
     steps:
       - name: Checkout
@@ -36,22 +31,26 @@ jobs:
       - name: Grant execute permission for gradlew
         working-directory: server
         run: chmod +x gradlew
+        
       - name: Build
         working-directory: server
         run: ./gradlew build -x test
-      - name: Move jar to root
-        run: mv ./server/build/libs/*.jar ./server.jar
-        
-      - name: Deploy gcp
+
+  deploy-be:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Upload jar
         uses: appleboy/scp-action@master
         with: 
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           key: '${{ secrets.SSH_KEY }}'
-          source: "server.jar,./server/src/main/resources/key.json"
+          source: "./server/build/libs/*.jar"
           target: "~"
 
-      - name: Run Application
+      - name: Run script
         uses: appleboy/ssh-action@master
         with: 
           host: '${{ secrets.SSH_HOST }}'

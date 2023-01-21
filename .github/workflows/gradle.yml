@@ -40,6 +40,8 @@ jobs:
         run: mv ./server/build/libs/*.jar ./server.jar
 
   deploy-be:
+    env: 
+      CI: false
     runs-on: ubuntu-latest
     needs: build
     

@@ -48,7 +48,7 @@ jobs:
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           key: '${{ secrets.SSH_KEY }}'
-          source: "server.jar"
+          source: "server.jar,./server/src/main/resources/key.json"
           target: "~"
 
       - name: Run Application
@@ -58,7 +58,6 @@ jobs:
           username: '${{ secrets.SSH_USERNAME }}'
           key: '${{ secrets.SSH_KEY }}'
           script: sh run.sh
-
 
 #       - id: 'auth'
 #         name: 'Authenticate to Google Cloud'
@@ -81,12 +80,4 @@ jobs:
 #          ssh_keys_dir: '~/.ssh'
 #          ssh_private_key: '${{ secrets.SSH_KEY }}'
 #          command: 'java -jar -Dspring.profiles.active=gcs java.jar'
-
-
-
-
-
-
-
-
 

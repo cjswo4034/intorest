@@ -65,7 +65,7 @@ jobs:
           gcloud compute scp --project='${{ secrets.GCP_PROJECT_ID }}' --zone='asia-northeast3-a' ./test2.txt 'instance-vm:~'
         
       - name: Run Application
-        uses: 'google-github-actions/ssh-compute@v1'
+        uses: 'google-github-actions/ssh-compute@v0'
         with:
          instance_name: 'instance-vm'
          zone: 'asia-northeast3-a'

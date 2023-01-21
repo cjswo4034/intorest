@@ -35,10 +35,13 @@ jobs:
       - name: Build
         working-directory: server
         run: ./gradlew build -x test
+      
+      - name: Move jar to root
+        run: mv ./server/build/libs/*.jar ./server.jar
 
   deploy-be:
-    needs: [ build ]
     runs-on: ubuntu-latest
+    needs: build
     
     steps:
       - name: Upload jar
@@ -47,7 +50,7 @@ jobs:
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           key: '${{ secrets.SSH_KEY }}'
-          source: "./server/build/libs/*.jar"
+          source: "./server.jar"
           target: "~"
 
       - name: Run script

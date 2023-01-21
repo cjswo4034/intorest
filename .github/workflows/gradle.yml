@@ -36,29 +36,33 @@ jobs:
           touch ./server/src/main/resources/key.json
           cp ./*.json ./server/src/main/resources/key.json
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'temurin'
+#       - name: Set up JDK 11
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: '11'
+#           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
-        working-directory: server
-        run: chmod +x gradlew
-      - name: Build
-        working-directory: server
-        run: ./gradlew build -x test
-      - name: Move jar to root
-        run: mv ./server/build/libs/*.jar ./server.jar
+#       - name: Grant execute permission for gradlew
+#         working-directory: server
+#         run: chmod +x gradlew
+#       - name: Build
+#         working-directory: server
+#         run: ./gradlew build -x test
+#       - name: Move jar to root
+#         run: mv ./server/build/libs/*.jar ./server.jar
         
-      - name: Deploy gcp
-        uses: appleboy/scp-action@master
-        with: 
-          host: '${{ secrets.SSH_HOST }}'
-          username: '${{ secrets.SSH_USERNAME }}'
-          key: '${{ secrets.SSH_PUB_KEY }}'
-          source: "./server.jar"
-          target: "~"
+#       - name: Deploy gcp
+#         uses: appleboy/scp-action@master
+#         with: 
+#           host: '${{ secrets.SSH_HOST }}'
+#           username: '${{ secrets.SSH_USERNAME }}'
+#           key: '${{ secrets.SSH_PUB_KEY }}'
+#           source: "./server.jar"
+#           target: "~"
+      - name: 'Use gcloud CLI'
+        run: |
+          echo 'testfile' >> ./test.txt
+          'gcloud compute scp ./test.txt intorest-vm:~'
         
       - name: Run Application
         uses: appleboy/ssh-action@master

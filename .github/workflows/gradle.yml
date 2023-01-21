@@ -7,7 +7,7 @@ on:
     branches: ['main']
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID}}
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCE_INSTANCE: intorest-vm
   GCE_INSTANCE_ZONE: asia-northeast3
 
@@ -62,7 +62,7 @@ jobs:
       - name: 'Use gcloud CLI'
         run: |
           touch test.txt
-          gcloud compute scp --zone='asia-northeast3-a' ./test.txt 'intorest-vm:~'
+          gcloud compute scp --project='${{ secrets.GCP_PROJECT_ID }}' --zone='asia-northeast3-a' ./test.txt 'instance-vm:~'
         
       - name: Run Application
         uses: appleboy/ssh-action@master

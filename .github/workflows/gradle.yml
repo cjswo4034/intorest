@@ -1,13 +1,16 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: ['main']
-
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'main'
+      
 jobs:
   build:
+    if: github.event.pull_request.merged
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3

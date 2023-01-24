@@ -9,7 +9,6 @@ spring:
       enabled: true
       path: /h2
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
@@ -20,8 +19,6 @@ spring:
           sharedCache:
             mode: ENABLE_SELECTIVE
       hibernate:
-        format_sql: true
-        generate_statistics: true
         cache:
           use_query_cache: true
           use_second_level_cache: true
@@ -48,13 +45,10 @@ cloud:
     gcs:
       domain: https://storage.cloud.google.com
       duration: 15
-      bucket-name: intorest-images
+      bucket-name: intorest-store
 
 logging:
-  level:
-    org:
-      hibernate:
-        type: trace
+  level: info
 
 server:
   port: 8080

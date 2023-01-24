@@ -45,4 +45,4 @@ jobs:
           key: '${{ secrets.SSH_KEY }}'
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
-          script: sh run.sh
+          script: sh initialize.sh

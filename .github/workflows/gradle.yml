@@ -38,8 +38,9 @@ jobs:
       
       - name: Move jar to root
         run: |
-          mkdir /home/deploy
-          mv ./server/build/libs/*.jar /home/deploy/server.jar
+          pwd
+          sudo mkdir /home/deploy
+          sudo mv ./server/build/libs/*.jar /home/deploy/server.jar
 
   deploy-be:
     env: 

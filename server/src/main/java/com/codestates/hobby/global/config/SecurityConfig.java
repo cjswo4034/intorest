@@ -3,6 +3,7 @@ package com.codestates.hobby.global.config;
 import static org.springframework.security.config.Customizer.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,9 +52,9 @@ public class SecurityConfig {
 			.httpBasic().disable();
 		http.authorizeHttpRequests(authorize -> authorize
 			// TODO: 추가하기
-			.mvcMatchers(HttpMethod.GET, "**").permitAll()
+			.mvcMatchers(HttpMethod.GET, "/**").permitAll()
 			.mvcMatchers(HttpMethod.POST, "/members").permitAll()
-			.anyRequest().authenticated());
+			.anyRequest().permitAll());
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 			.maximumSessions(1)
@@ -69,9 +70,10 @@ public class SecurityConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
-
+		configuration.setAllowedOrigins(List.of("*"));
+		configuration.setAllowedHeaders(List.of("*"));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS", "HEAD"));
+		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;

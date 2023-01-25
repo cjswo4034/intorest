@@ -1,5 +1,7 @@
 spring:
   jpa:
+    hibernate:
+      ddl-auto: create
     properties:
       javax:
         cache:
@@ -30,7 +32,10 @@ cloud:
     gcs:
       domain: https://storage.cloud.google.com
       duration: 15
-      bucket-name: intorest-images
+      bucket-name: intorest-store
+
+logging:
+  level: warn
 
 server:
   port: 8080

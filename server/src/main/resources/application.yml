@@ -35,7 +35,9 @@ cloud:
       bucket-name: intorest-store
 
 logging:
-  level: warn
+  level: 
+    org: warn
+    com: warn
 
 server:
   port: 8080

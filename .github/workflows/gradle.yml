@@ -48,4 +48,4 @@ jobs:
           key: '${{ secrets.SSH_KEY }}'
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
-          script: sh ~/initialize.sh
+          script: sudo sh ~/initialize.sh

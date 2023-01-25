@@ -12,12 +12,11 @@ spring:
 cloud:
   storage:
     gcs:
-      bucket-name: ${STORAGE_BUCKET}
+      bucket-name: intorest-imgaes
 
 logging:
   level:
-    org: info
-    com: info
+    org: warn
 
 server:
   port: 80

@@ -40,7 +40,7 @@ jobs:
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           source: "server.jar"
-          target: "~"
+          target: "~/deploy"
 
       - name: Run Application
         uses: appleboy/ssh-action@master

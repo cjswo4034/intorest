@@ -40,7 +40,7 @@ jobs:
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
           source: "server.jar"
-          target: "/home/cjswo4034/"
+          target: "~"
 
       - name: Run Application
         uses: appleboy/ssh-action@master
@@ -48,4 +48,4 @@ jobs:
           key: '${{ secrets.SSH_KEY }}'
           host: '${{ secrets.SSH_HOST }}'
           username: '${{ secrets.SSH_USERNAME }}'
-          script: sh initialize.sh
+          script: sudo sh initialize.sh

@@ -12,7 +12,7 @@ spring:
 cloud:
   storage:
     gcs:
-      bucket-name: intorest-imgaes
+      bucket-name: intorest-store
 
 logging:
   level:

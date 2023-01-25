@@ -17,6 +17,7 @@ cloud:
 logging:
   level:
     org: info
+    com: info
 
 server:
   port: 80

@@ -49,13 +49,7 @@ public class SecurityConfig {
 			.cors(withDefaults())
 			.formLogin().disable()
 			.httpBasic().disable();
-		http.authorizeHttpRequests(authorize -> authorize
-			// TODO: 추가하기
-/*			.antMatchers(HttpMethod.POST,"/series", "/showcases", "/posts").authenticated()
-			.antMatchers(HttpMethod.PATCH,"/members", "/series", "/showcases", "/posts").authenticated()
-            .antMatchers(HttpMethod.DELETE,"/members", "/series", "/showcases", "/posts").authenticated()
-            .antMatchers(HttpMethod.GET,"/members").authenticated()*/
-			.anyRequest().permitAll());
+		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 		http.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 			.maximumSessions(1)
@@ -70,12 +64,11 @@ public class SecurityConfig {
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of("*"));
-		configuration.setAllowedHeaders(List.of("*"));
-		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS", "HEAD"));
-
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:3000", "http://127.0.0.1:8080"));
+		configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Cache-control"));
+		configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}

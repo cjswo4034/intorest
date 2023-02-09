@@ -75,13 +75,13 @@ public class ShowcaseService {
 
 	@Transactional(readOnly = true)
 	public Slice<Showcase> findAll(InfiniteScrollRequest isRequest) {
-		return setThumbnailAndComment(showcaseRepository.findAllByIdLessThan(getOffset(isRequest), isRequest.of()));
+		return setThumbnailAndComment(showcaseRepository.findAllByIdLessThan(isRequest.getOffset(), isRequest.getPageable()));
 	}
 
 	@Transactional(readOnly = true)
 	public Slice<Showcase> findAllByMember(long memberId, InfiniteScrollRequest isRequest) {
 		return setThumbnailAndComment(
-			showcaseRepository.findAllByMemberIdAndIdLessThan(memberId, getOffset(isRequest), isRequest.of())
+			showcaseRepository.findAllByMemberIdAndIdLessThan(memberId, isRequest.getOffset(), isRequest.getPageable())
 		);
 	}
 
@@ -90,14 +90,14 @@ public class ShowcaseService {
 		Category category = categoryService.findHobbyByName(categoryName);
 
 		return setThumbnailAndComment(
-			showcaseRepository.findAllByCategoryAndIdLessThan(category, getOffset(isRequest), isRequest.of())
+			showcaseRepository.findAllByCategoryAndIdLessThan(category, isRequest.getOffset(), isRequest.getPageable())
 		);
 	}
 
 	@Transactional(readOnly = true)
 	public Slice<Showcase> search(String query, InfiniteScrollRequest isRequest) {
 		return setThumbnailAndComment(
-			showcaseRepository.findAllByContentContainsAndIdLessThan(query, getOffset(isRequest), isRequest.of())
+			showcaseRepository.findAllByContentContainsAndIdLessThan(query, isRequest.getOffset(), isRequest.getPageable())
 		);
 	}
 
@@ -125,7 +125,7 @@ public class ShowcaseService {
 		Map<Long, CommentProjection> projs = commentRepository.findAllLastIdByShowcaseId(showcases.keySet()).stream()
 			.collect(Collectors.toMap(CommentProjection::getId, Function.identity()));
 
-		commentRepository.findAllByIdUsingFetch(projs.keySet())
+		commentRepository.findAllByIdIn(projs.keySet())
 			.forEach(comment -> {
 				Showcase showcase = showcases.get(comment.getShowcase().getId());
 				showcase.setCommentCount(projs.get(comment.getId()).getCount());
@@ -141,9 +141,5 @@ public class ShowcaseService {
 			throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_TO_EDIT);
 
 		return showcase;
-	}
-
-	private long getOffset(InfiniteScrollRequest isRequest) {
-		return isRequest.getOffset() <= 0 ? showcaseRepository.findLastShowcaseId() + 1 : isRequest.getOffset();
 	}
 }

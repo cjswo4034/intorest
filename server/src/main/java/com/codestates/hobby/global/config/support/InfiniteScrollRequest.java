@@ -16,11 +16,11 @@ public class InfiniteScrollRequest {
 		this.size = size;
 	}
 
-	public PageRequest of() {
-		return PageRequest.of(0, size, Sort.by("id").descending());
+	public PageRequest getPageable() {
+		return PageRequest.ofSize(size).withSort(Sort.by("id").descending());
 	}
 
 	public long getOffset() {
-		return offset;
+		return offset > 0 ? offset : Long.MAX_VALUE;
 	}
 }

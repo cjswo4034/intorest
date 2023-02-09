@@ -32,11 +32,6 @@ spring:
     init:
       mode: always
 
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace
 server:
   tomcat:
     threads:

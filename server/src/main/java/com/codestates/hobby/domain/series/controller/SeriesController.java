@@ -38,7 +38,6 @@ public class SeriesController {
 
         Series series =  seriesService.create(post);
 
-        log.info("\n\n--시리즈 생성--\n");
         return new ResponseEntity(series.getId(), HttpStatus.CREATED);
     }
 
@@ -49,7 +48,6 @@ public class SeriesController {
         patch.setSeriesId(seriesId);
         seriesService.edit(patch, loginMember.getId());
 
-        log.info("\n\n--시리즈 수정--\n");
         return new ResponseEntity(seriesId, HttpStatus.OK);
     }
 
@@ -58,7 +56,6 @@ public class SeriesController {
                                  @AuthenticationPrincipal Member loginMember) {
         seriesService.delete(seriesId, loginMember.getId());
 
-        log.info("\n\n--시리즈 삭제--\n");
         return new ResponseEntity(seriesId, HttpStatus.NO_CONTENT);
     }
 
@@ -69,7 +66,6 @@ public class SeriesController {
 
         SeriesDto.SimpleResponse response = seriesMapper.SeriesToSimpleResponseDto(series);
 
-        log.info("\n\n--시리즈 단건 조회--\n");
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
@@ -83,7 +79,6 @@ public class SeriesController {
             return response;
         });
 
-        log.info("\n\n--시리즈 전체 조회--\n");
         return new ResponseEntity(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 
@@ -97,7 +92,6 @@ public class SeriesController {
             return response;
         });
 
-        log.info("\n\n--카테고리에 해당하는 시리즈 조회--\n");
         return new ResponseEntity(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 
@@ -110,7 +104,6 @@ public class SeriesController {
 
         Page<SeriesDto.SimpleResponse> responses = series.map(seriesMapper::SeriesToSimpleResponseDto);
 
-        log.info("\n\n--멤버에 해당하는 시리즈 조회--\n");
         return new ResponseEntity<>(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 
@@ -120,7 +113,6 @@ public class SeriesController {
 
         Page<SeriesDto.SimpleResponse> responses = series.map(seriesMapper::SeriesToSimpleResponseDto);
 
-        log.info("\n\n--쿼리가 포함된 시리즈 조회--\n");
         return new ResponseEntity<>(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 }

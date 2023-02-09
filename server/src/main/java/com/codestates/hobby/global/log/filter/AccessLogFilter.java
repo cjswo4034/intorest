@@ -1,4 +1,4 @@
-package com.codestates.hobby.global.log;
+package com.codestates.hobby.global.log.filter;
 
 import org.apache.logging.log4j.ThreadContext;
 

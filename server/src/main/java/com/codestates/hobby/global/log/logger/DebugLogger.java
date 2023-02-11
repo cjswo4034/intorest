@@ -1,5 +1,6 @@
 package com.codestates.hobby.global.log.logger;
 
+import static com.codestates.hobby.global.utils.LogUtil.*;
 import static net.logstash.logback.argument.StructuredArguments.*;
 
 import java.util.Arrays;
@@ -52,6 +53,8 @@ public class DebugLogger {
 		StructuredArgument method = kv("method", signature.getName());
 		StructuredArgument latency = kv("latency", System.currentTimeMillis() - tic);
 		StructuredArgument args = a("args", joinPoint.getArgs());
+
+		setLogIdIfIsEmpty();
 
 		log.info("", LogType.DEBUG.getArgument(), layer, target, method, latency, args);
 	}

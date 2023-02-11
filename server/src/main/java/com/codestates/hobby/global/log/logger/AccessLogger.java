@@ -1,10 +1,9 @@
 package com.codestates.hobby.global.log.logger;
 
+import static com.codestates.hobby.global.utils.LogUtil.*;
 import static net.logstash.logback.argument.StructuredArguments.*;
-import static org.apache.commons.lang3.StringUtils.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,12 +13,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.util.ServletRequestPathUtils;
 
 import com.codestates.hobby.global.log.dto.LogType;
 import com.codestates.hobby.global.log.dto.RequestLog;
@@ -40,8 +38,7 @@ public class AccessLogger implements Filter {
 		HttpServletRequest request = (HttpServletRequest)req;
 		HttpServletResponse response = (HttpServletResponse)res;
 
-		String logId = defaultString(request.getRequestedSessionId(), UUID.randomUUID().toString());
-		ThreadContext.put("logId", logId);
+		setLogIdIfIsEmpty();
 
 		if (request.getRequestURI().startsWith("/favicon")) {
 			chain.doFilter(request, response);
@@ -75,8 +72,9 @@ public class AccessLogger implements Filter {
 	private HandlerMethod getHandlerMethod(HttpServletRequest request) {
 		HandlerMethod method = null;
 		try {
-			HandlerExecutionChain handlerExeChain = mapper.getHandler(request);
-			method = (HandlerMethod)handlerExeChain.getHandler();
+			if (!ServletRequestPathUtils.hasParsedRequestPath(request))
+				ServletRequestPathUtils.parseAndCache(request);
+			method = (HandlerMethod)mapper.getHandler(request).getHandler();
 		} catch (Exception ignore) {
 
 		}

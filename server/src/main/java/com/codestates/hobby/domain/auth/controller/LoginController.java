@@ -48,7 +48,6 @@ public class LoginController {
 		if (session != null)
 			session.invalidate(); //세션 제거
 
-		log.info("\n\n--로그아웃 성공--\n");
 		return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
 	}
 
@@ -60,12 +59,6 @@ public class LoginController {
 		}
 		session.getAttributeNames().asIterator()
 			.forEachRemaining(name -> log.info("session name={},value={}", name, session.getAttribute(name)));
-
-		log.info("sessionId={}", session.getId());
-		log.info("getMaxInactiveInterval={}", session.getMaxInactiveInterval());
-		log.info("creationTime={}", new Date(session.getCreationTime()));
-		log.info("lastAccessedTime={}", new Date(session.getLastAccessedTime()));
-		log.info("isNew={}", session.isNew());
 
 		return "세션 출력";
 	}

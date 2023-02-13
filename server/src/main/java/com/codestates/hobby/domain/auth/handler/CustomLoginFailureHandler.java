@@ -22,6 +22,5 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         response.setContentType("application/json");
         response.getWriter().print(exception.getMessage());
         response.getWriter().close();
-        log.error("\n\n--로그인 실패-- \n", exception.getMessage());
     }
 }

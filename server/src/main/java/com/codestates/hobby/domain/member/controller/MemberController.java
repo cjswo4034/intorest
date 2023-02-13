@@ -32,7 +32,6 @@ public class MemberController {
     public ResponseEntity post(@Valid @RequestBody MemberDto.Post post) {
         Member member = service.create(post);
 
-        log.info("\n\n--회원 가입--\n");
         return new ResponseEntity<>(member.getId(), HttpStatus.CREATED);
     }
 
@@ -43,7 +42,6 @@ public class MemberController {
         patch.setMemberId(memberId);
         Member member = service.edit(patch, loginMember.getId());
 
-        log.info("\n\n--회원 정보 수정--\n");
         return new ResponseEntity(member.getId(), HttpStatus.OK);
     }
 
@@ -54,7 +52,6 @@ public class MemberController {
 
         service.delete(memberId);
 
-        log.info("\n\n--회원 탈퇴--\n");
         return new ResponseEntity(memberId, HttpStatus.NO_CONTENT);
     }
 
@@ -62,7 +59,6 @@ public class MemberController {
     public ResponseEntity get(@PathVariable("member-id") long memberId) {
         Member member = service.find(memberId);
 
-        log.info("\n\n--해당 회원의 정보 조회--\n");
         return new ResponseEntity(mapper.MemberToResponseDto(member), HttpStatus.OK);
     }
 
@@ -72,7 +68,6 @@ public class MemberController {
 
         Page<MemberDto.Response> responses = series.map(mapper::MemberToResponseDto);
 
-        log.info("\n\n--전체 회원 조회--\n");
         return new ResponseEntity(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 }

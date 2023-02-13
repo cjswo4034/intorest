@@ -18,7 +18,7 @@ spring:
 cloud:
   storage:
     gcs:
-      bucket-name: intorest-imgaes
+      bucket-name: intorest-images
 
 server:
   tomcat:

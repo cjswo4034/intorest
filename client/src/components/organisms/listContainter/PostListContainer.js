@@ -19,12 +19,12 @@ const PostListContainer = ({ postList }) => {
 
   return (
     <Container>
-      {postList.map(post => {
+      {postList?.map(post => {
         const handleClick = () => {
           navigate(`/posts/${post.category}/${post.id}`);
         };
 
-        return <PostCard key={post.id} postId={post.id} handleClick={handleClick} />;
+        return <PostCard key={post.id} post={post} handleClick={handleClick} />;
       })}
     </Container>
   );

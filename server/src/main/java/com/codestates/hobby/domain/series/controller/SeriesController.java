@@ -9,8 +9,6 @@ import com.codestates.hobby.domain.series.service.SeriesService;
 
 import com.codestates.hobby.global.config.support.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
-import com.codestates.hobby.global.exception.BusinessLogicException;
-import com.codestates.hobby.global.exception.ExceptionCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +65,7 @@ public class SeriesController {
     @GetMapping("/series/{series-id}")
     public ResponseEntity get(@PathVariable("series-id") long seriesId,
                               CustomPageRequest pageRequest) {
-        Series series = seriesService.findById(seriesId);
+        Series series = seriesService.get(seriesId);
 
         SeriesDto.SimpleResponse response = seriesMapper.SeriesToSimpleResponseDto(series);
 
@@ -79,7 +77,11 @@ public class SeriesController {
     public ResponseEntity getAll(CustomPageRequest pageRequest) {
         Page<Series> series = seriesService.findAll(pageRequest.to());
 
-        Page<SeriesDto.SimpleResponse> responses = series.map(seriesMapper::SeriesToSimpleResponseDto);
+        Page<SeriesDto.Response> responses = series.map(aSeries -> {
+            SeriesDto.Response response = seriesMapper.SeriesToResponseDto(aSeries);
+            response.setPost(aSeries.getPosts().isEmpty() ? null : postMapper.postToSimpleResponse(aSeries.getPosts().get(0)));
+            return response;
+        });
 
         log.info("\n\n--시리즈 전체 조회--\n");
         return new ResponseEntity(new MultiResponseDto<>(responses), HttpStatus.OK);
@@ -109,6 +111,16 @@ public class SeriesController {
         Page<SeriesDto.SimpleResponse> responses = series.map(seriesMapper::SeriesToSimpleResponseDto);
 
         log.info("\n\n--멤버에 해당하는 시리즈 조회--\n");
+        return new ResponseEntity<>(new MultiResponseDto<>(responses), HttpStatus.OK);
+    }
+
+    @GetMapping("/series/search")
+    public ResponseEntity<?> search(@RequestParam String query, CustomPageRequest pageRequest) {
+        Page<Series> series = seriesService.search(query, pageRequest.to());
+
+        Page<SeriesDto.SimpleResponse> responses = series.map(seriesMapper::SeriesToSimpleResponseDto);
+
+        log.info("\n\n--쿼리가 포함된 시리즈 조회--\n");
         return new ResponseEntity<>(new MultiResponseDto<>(responses), HttpStatus.OK);
     }
 }

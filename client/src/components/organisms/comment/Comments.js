@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import styled from 'styled-components';
 
 import useCommentAPI from '../../../hooks/useCommentAPI';
@@ -15,21 +16,38 @@ const Container = styled.div`
 `;
 
 const Comments = ({ basePath, id }) => {
-  const { comments, getComment } = useCommentAPI();
-
-  useEffect(() => {
+  const { comments, commentCount, totalPages, getComment } = useCommentAPI();
+  const commentReloading = () => {
     getComment(basePath, id, {
       page: 1,
       size: 5,
     });
+  };
+
+  const refreshComment = page => {
+    getComment(basePath, id, {
+      page,
+      size: 5,
+    });
+  };
+
+  useEffect(() => {
+    commentReloading();
   }, []);
 
   return (
     <Container>
-      <CommentHeader comments={comments?.pageInfo?.totalElements} />
+      <CommentHeader commentsCount={commentCount} />
       {/* postId -댓글을 제출 할때 어떤 POST에 속해있는지 알려주기 위함 */}
-      <CommentInputContainer postId={id} />
-      <CommentContentsContainer comments={comments} basePath={basePath} />
+      <CommentInputContainer basePath={basePath} id={id} callback={commentReloading} />
+      <CommentContentsContainer
+        totalPages={totalPages}
+        comments={comments}
+        contentId={id}
+        basePath={basePath}
+        callback={commentReloading}
+        refreshComment={refreshComment}
+      />
     </Container>
   );
 };

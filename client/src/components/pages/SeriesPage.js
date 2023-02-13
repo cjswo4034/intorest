@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import SeriesHeader from '../organisms/SeriesHeader';
 import useGetSeries from '../../hooks/useGetSeries';
 import PostInSeriesPage from './PostInSeriesPage';
+import useSeriesStore from '../../store/seriesStore';
 
 const Container = styled.div`
   display: flex;
@@ -15,15 +17,19 @@ const Container = styled.div`
 `;
 
 const SeriesPage = () => {
-  const [seriesId] = useSearchParams();
+  const { id } = useParams();
 
-  // `${HOST}/series/${postId}` 해당하는 정보를 가져옴
-  const { series } = useGetSeries(seriesId);
+  const { series, getSeries } = useGetSeries();
+  const { currentPostId } = useSeriesStore();
+
+  useEffect(() => {
+    getSeries(id);
+  }, []);
 
   return (
     <Container>
-      <SeriesHeader series={series} />
-      <PostInSeriesPage />
+      <SeriesHeader series={series} seriesId={id} />
+      {currentPostId === 0 ? '' : <PostInSeriesPage />}
     </Container>
   );
 };

@@ -4,6 +4,7 @@ import { BlackButton, WhiteButton } from '../../atoms/Buttons';
 import { LabelListTitle } from '../../../styles/typo';
 import usePostStore from '../../../store/postStore';
 import useGetSeriesListbyUser from '../../../hooks/useGetSeriesListbyUser';
+import useAuthStore from '../../../store/useAuthStore';
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -72,31 +73,45 @@ const DropdownItem = styled.li`
 // writer의 정보를 못가져옴
 const DropdownSeriesList = ({ post }) => {
   const { currentSeriesId, setCurrentSeriesId, setIsOpen } = usePostStore();
-  const { seriesList } = useGetSeriesListbyUser(post.writer.id);
+  const { currentUserId } = useAuthStore(state => state);
 
+  // 로그인한 사용자의 id를 가져오도록 수정이 되어야함
+  const { seriesList } = useGetSeriesListbyUser(currentUserId);
+
+  console.log(post, 'post in DropdownSeriesList');
   const toggleOpen = () => {
     setIsOpen();
   };
 
   const submitChange = () => {
     setIsOpen();
+    const body = {
+      title: post.title,
+      content: post.content,
+      category: post.category,
+      description: 'description',
+      seriesId: currentSeriesId,
+    };
+
+    console.log(body, 'body');
+
+    // if (post.imgUrls) body.imgUrls = post.imgUrls;
     axios
-      .patch(`posts/${post.id}`, {
-        seriesId: currentSeriesId,
-      })
+      .patch(`posts/${post.id}`, body, { withCredentials: true })
       .then(res => {
         console.log(res);
       })
       .catch(err => {
-        console.log(err);
+        // dialog를 나타나게 하고 싶음
         alert(err.message);
       });
   };
+
   return (
     <Container>
       <ComponentLabel>Add to My Series</ComponentLabel>
       <DropdownListContainer>
-        {seriesList.map(series =>
+        {seriesList?.map(series =>
           currentSeriesId === series.id ? (
             <DropdownItem
               key={series.id}

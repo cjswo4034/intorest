@@ -1,31 +1,28 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-// import { seriesListDummy } from '../constants/dummyData';
 
 /**
  *
  * @param {string} category
- * @param {string} page
+ * @param {number} page
  * @returns {seriesList[], seriesPageInfo{}, boolean, boolean}
  */
-
-// 내용 수정 필요
-const useGetSeriesListbyUser = writer => {
+const useSearchSeriesList = (query, page = 1) => {
   const [seriesList, setSeriesList] = useState([]);
   const [seriesPageInfo, setSeriesPageInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingError, setIsLoadingError] = useState(false);
 
-  const URL = `/members/${writer}/series?page=1&size=10`;
+  const URL = `series/search?page=${page}&size=10&query=${query}`;
 
   useEffect(() => {
     setIsLoading(true);
 
     axios
       .get(URL)
-      .then(({ data, pageInfo }) => {
-        console.log(data, 'data in useGetSeriesListbyUser');
-        setSeriesList(data.data);
+      .then(res => {
+        const { data, pageInfo } = res.data;
+        setSeriesList(data);
         setSeriesPageInfo(pageInfo);
         setIsLoading(false);
       })
@@ -34,10 +31,10 @@ const useGetSeriesListbyUser = writer => {
         setIsLoading(false);
         setIsLoadingError(true);
       });
-  }, []);
+  }, [query, page]);
 
   // 아직은 seriesList에 seriesListDummy의 값을 넣음
   return { seriesList, seriesPageInfo, isLoading, isLoadingError };
 };
 
-export default useGetSeriesListbyUser;
+export default useSearchSeriesList;

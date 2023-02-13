@@ -16,7 +16,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 99;
 
   box-shadow: 0px 2px 8px rgba(40, 41, 61, 0.08), 0px 20px 32px rgba(96, 97, 112, 0.24);
 `;
@@ -56,7 +56,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    const url = 'logout';
+    const url = 'auth/logout';
 
     axios
       .get(url)

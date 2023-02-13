@@ -8,10 +8,14 @@ import { UserInfoSmall } from '../molecules/UserInfo';
 import { WhiteShadowButton, BlackShadowButton } from '../atoms/Buttons';
 import ShowcaseImageInput from '../molecules/showcase/ShowcaseImageInput';
 import Dropdown from '../organisms/Dropdown';
-import useShowcaseCreateStore from '../../store/showcaseCreateStore';
+import useContentCreateStore from '../../store/contentCreateStore';
+import useGetUser from '../../hooks/useGetUser';
+import useAuthStore from '../../store/useAuthStore';
 
 const ShowcaseCreatePage = () => {
-  const { setContent, initStore, postShowcase } = useShowcaseCreateStore();
+  const { setContent, initStore, postShowcase } = useContentCreateStore();
+  const { currentUserId } = useAuthStore();
+  const { userInfo } = useGetUser(currentUserId);
   const navigate = useNavigate();
 
   // save text to content state
@@ -20,9 +24,14 @@ const ShowcaseCreatePage = () => {
   };
 
   const handlePostShowcase = async () => {
-    await postShowcase();
-    navigate('/');
-    window.location.reload();
+    await postShowcase(() => {
+      navigate('/');
+      window.location.reload();
+    });
+  };
+
+  const handleCancle = () => {
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -41,16 +50,16 @@ const ShowcaseCreatePage = () => {
         </FileInputContainer>
         <ContentInputContiner>
           <DefaultBox>
-            <UserInfoSmall />
+            <UserInfoSmall id={userInfo?.id} name={userInfo?.nickname} image={userInfo?.imgUrl} />
           </DefaultBox>
           <DefaultBox>
-            <TextArea placeholder="내용을 입력하세요(최대 300자)" maxLength="300" handleContent={handleTextOnChange} />
+            <TextArea placeholder="내용을 입력하세요(최대 300자)" maxLength="300" onChange={handleTextOnChange} />
           </DefaultBox>
           <Dropdown>Categorie</Dropdown>
         </ContentInputContiner>
       </Container>
       <ButtonContainer>
-        <WhiteShadowButton>Cancel</WhiteShadowButton>
+        <WhiteShadowButton onClick={handleCancle}>Cancel</WhiteShadowButton>
         <BlackShadowButton onClick={handlePostShowcase}>Submit</BlackShadowButton>
       </ButtonContainer>
     </>

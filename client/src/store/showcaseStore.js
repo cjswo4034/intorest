@@ -1,5 +1,7 @@
 import axios from 'axios';
 import create from 'zustand';
+import Swal from 'sweetalert2';
+import { INVALID_LOGIN } from '../constants/Messages';
 
 const useShowcaseStore = create((set, get) => ({
   disabledFlag: false,
@@ -12,6 +14,8 @@ const useShowcaseStore = create((set, get) => ({
   error: null,
   itemList: [],
 
+  initializeStore: () => set({ itemList: [], offset: -1, disabledFlag: false }),
+
   getItemList: async (count, callback) => {
     const { disabledFlag, offset, isLoading } = get();
     const body = {
@@ -20,12 +24,12 @@ const useShowcaseStore = create((set, get) => ({
         size: count,
       },
     };
+
     // 중복 실행 방지
     if (isLoading) return;
 
     // 더이상 불러올게 없으면 callback 실행 후 리턴
     if (disabledFlag === true) {
-      console.log('disabled flag is on');
       return;
     }
 
@@ -54,20 +58,39 @@ const useShowcaseStore = create((set, get) => ({
     set({ isLoading: false });
   },
 
-  postComment: async (id, content, handleInit) => {
+  postComment: async (id, content, currentUserId, handleInit) => {
     try {
-      const response = await axios.post(
+      if (!currentUserId) {
+        Swal.fire({ title: INVALID_LOGIN, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      await axios.post(
         `/showcases/${id}/comments`,
         { content },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: false,
+          'Content-Type': 'application/json',
         },
       );
-      console.log('코멘트를 달았습니다.');
-      console.log(response);
+
+      const { itemList } = get();
+      const targetIndex = itemList.findIndex(el => el.id === id);
+      if (itemList[targetIndex]?.lastComment === undefined) {
+        const newArray = [...itemList];
+        newArray[targetIndex].lastComment = {
+          id: 1, // 댓글 식별자
+          content, // 댓글 내용
+          writer: {
+            // 댓글 작성자 정보
+            id: currentUserId, // 댓글 작성자 식별자
+            nickname: '나', // 댓글 작성자 닉네임
+          },
+        };
+        set({
+          itemList: newArray,
+        });
+      }
+
       handleInit();
     } catch (err) {
       console.log(err);

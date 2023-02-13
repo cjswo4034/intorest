@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { LabelListTitle, LabelMedium, ParagraphMedium } from '../../../styles/typo';
 import { UserInfoSmall } from '../UserInfo';
-import { PARAGRAPH, TITLE } from '../../../constants/Paragraph';
 import useGetPost from '../../../hooks/useGetPost';
 
 const Container = styled.div`
@@ -67,6 +66,17 @@ const Box = styled.div`
   height: fit-content;
   ${LabelMedium}
 `;
+
+const Box2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+
+  width: fit-content;
+  height: fit-content;
+  ${LabelMedium}
+`;
 const Title = styled.div`
   width: ${props => props.width || '534px'};
   height: 48px;
@@ -76,6 +86,7 @@ const Title = styled.div`
 
   ${LabelListTitle}
 `;
+
 const Paragraph = styled.div`
   width: ${props => props.width || '534px'};
   height: 42px;
@@ -104,42 +115,74 @@ const Layer = styled.div`
 const CreatedAtText = styled.div`
   color: var(--gray-400);
 `;
+
+const Title2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px;
+  gap: 10px;
+`;
+
+const PostThinCard = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 880px;
+  padding-right: 10px;
+  background: ${props => (props.selected ? 'var(--gray-700)' : '#efefef')};
+  color: ${props => (props.selected ? 'var(--gray-300)' : '')};
+`;
+
+const PostSeriesCard = ({ postId, handleClick, selected, idx }) => {
+  // 현재는postId와 관계없이 PostDummy에 있는 데이터를 가져옴
+  const { post } = useGetPost(postId);
+
+  const { title, createdAt, modifiedAt, writer } = post;
+
+  return (
+    <PostThinCard selected={selected} onClick={handleClick}>
+      <Box2>
+        <Title2>{idx || '1'}</Title2>
+        <Title2>{title || 'title'}</Title2>
+      </Box2>
+      <Box>
+        <UserInfoSmall id={writer?.id} name={writer?.nickname} image={writer?.profileUrl} />
+        <CreatedAtText> {new Date().toDateString(modifiedAt || createdAt)} </CreatedAtText>
+      </Box>
+    </PostThinCard>
+  );
+};
 /**
  * 쇼케이스에서 사용하는 이미지 썸네일 molecules
  * @param {string|number} boxShadow - 전체컨테이너의 그림자 효과
  * @param {string} width - text의 길이
  * @returns {JSX.Element} - PostList 개별 항목을 나타내는 컴포넌트
  */
-const PostCard = ({ boxShadow, width, postId, handleClick, selected }) => {
-  // 현재는postId와 관계없이 PostDummy에 있는 데이터를 가져옴
-  const { post, isLoading, isLoadingError } = useGetPost(postId);
-
-  const { title, desc, createdAt, modifiedAt, views, comments } = post;
+const PostCard = ({ boxShadow, width, post, handleClick, selected }) => {
+  const { title, description, createdAt, modifiedAt, writer, thumbnailUrl } = post;
 
   // isLoading, isLoadingError state에 따라 컴포넌트 변경 예정
   // 나중에 Title,Paragraph조건문을 제거했을 때 렌더링 속도가 어떻게 변하는지 확인해봐야함
   // currentPost 일때 시각적으로 달라지는 부분이 필요할듯
-
-  console.log(isLoading, isLoadingError);
   return (
     <Container boxShadow={boxShadow} selected={selected}>
       <InfoLayer selected={selected}>
         <Layer onClick={handleClick}>
-          <Title width={width}>{title || TITLE}</Title>
-          <Paragraph width={width}>{desc || PARAGRAPH}</Paragraph>
+          <Title width={width}>{title || 'No TItle'} </Title>
+          <Paragraph width={width}>{description || 'No Description'}</Paragraph>
         </Layer>
         <ContextLayer>
           <Box>
-            <UserInfoSmall name="UserName" image="https://unsplash.it/1920/1080/?random" />
+            <UserInfoSmall id={writer?.id} name={writer?.nickname} image={writer?.profileUrl} />
             <CreatedAtText> {new Date().toDateString(modifiedAt || createdAt)} </CreatedAtText>
           </Box>
           <Box>
-            <span> viewed {Number(views)}</span>
-            <span> comments {Number(comments)}</span>
+            <span> viewed {Number(post?.views)}</span>
           </Box>
         </ContextLayer>
       </InfoLayer>
-      <ImageLayer />
+      <ImageLayer src={thumbnailUrl} alt="thumnail" />
     </Container>
   );
 };
@@ -150,22 +193,17 @@ const PostCard = ({ boxShadow, width, postId, handleClick, selected }) => {
  * @param {string} width - text의 길이
  * @returns {JSX.Element} - PostListStack을 나타내는 컴포넌트
  */
-const PostListStack = ({ boxShadow = 'var(--boxShadow-stack)', width = '278px', postId, imgWidth = '100px' }) => {
-  const { post, isLoading, isLoadingError } = useGetPost(postId);
-
-  const { title, desc, createdAt, modifiedAt } = post;
-
-  // isLoading, isLoadingError state에 따라 컴포넌트 변경 예정
-  console.log(isLoading, isLoadingError);
+const PostListStack = ({ boxShadow = 'var(--boxShadow-stack)', width = '278px', post, imgWidth = '100px' }) => {
+  const { title, description, createdAt, modifiedAt, writer } = post;
 
   return (
     <Container boxShadow={boxShadow}>
       <InfoLayer>
-        <Title width={width}>{title || '.....'} </Title>
-        <Paragraph width={width}>{desc || '.....'}</Paragraph>
+        <Title width={width}>{title || 'No TItle'} </Title>
+        <Paragraph width={width}>{description || 'No Description'}</Paragraph>
         <ContextLayer>
           <Box>
-            <UserInfoSmall name="UserName" image="https://unsplash.it/1920/1080/?random" />
+            <UserInfoSmall id={writer?.id} name={writer?.nickname} image={writer?.profileUrl} />
             <CreatedAtText> {new Date().toDateString(modifiedAt || createdAt)} </CreatedAtText>
           </Box>
         </ContextLayer>
@@ -174,4 +212,4 @@ const PostListStack = ({ boxShadow = 'var(--boxShadow-stack)', width = '278px', 
     </Container>
   );
 };
-export { PostCard, PostListStack };
+export { PostCard, PostSeriesCard, PostListStack };

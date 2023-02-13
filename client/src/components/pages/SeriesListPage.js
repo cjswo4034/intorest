@@ -26,20 +26,19 @@ const CreateSeriesButton = styled(BlueShadowButton)`
 const SeriesListPage = () => {
   const { category } = useParams();
   const [searchParams] = useSearchParams();
-  const curPage = searchParams.get('page') || 1;
+  const curPage = searchParams.get('page');
 
   // seriesList에 seriesListDummy.data
   // seriesPageInfo에 seriesListDummy.pageInfo
-  const { seriesList, seriesPageInfo, isLoading, isLoadingError } = useGetSeriesList(category, curPage);
+  const { seriesList, seriesPageInfo, isLoading } = useGetSeriesList(category || 'All', curPage);
 
-  // isLoading, isLoadingError 값에 따라 Loading 컴포넌트 변경 예정
-  console.log(isLoading, isLoadingError);
+  console.log(seriesList);
 
   return (
     <Container>
       <PageHeader
         headerSubTitle="Intorest In Category"
-        headerTitle={`Series In ${category}`}
+        headerTitle={`Series In ${category || 'All'}`}
         asideHeader={<CreateSeriesButton to="/series/new">Create Series</CreateSeriesButton>}
       />
       <Lnb currentTab="Series" category={category} />
@@ -48,7 +47,7 @@ const SeriesListPage = () => {
       ) : (
         <>
           <SeriesListContainer seriesList={seriesList} />
-          <Pagination totalPages={seriesPageInfo.totalPage} />
+          <Pagination totalPages={seriesPageInfo?.totalPages || 1} />
         </>
       )}
     </Container>

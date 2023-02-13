@@ -7,6 +7,7 @@ import { ParagraphMedium } from '../../../styles/typo';
 import Nickname from '../../atoms/Nickname';
 import ImageCard from '../../molecules/ImageCard';
 import Input from '../../atoms/Input';
+import useAuthStore from '../../../store/useAuthStore';
 
 /**
  * 썸네일을 포함한 메인페이지용 쇼케이스 박스 organisms
@@ -23,7 +24,6 @@ import Input from '../../atoms/Input';
 const Showcasebox = ({
   id,
   thumnail,
-  tagId,
   tagName,
   userImg,
   userId,
@@ -36,10 +36,12 @@ const Showcasebox = ({
   const commentRef = useRef(null);
   const [commentInput, setCommentInput] = useState('');
   const { postComment } = useShowcaseStore();
+  const { currentUserId } = useAuthStore();
 
   const handleOnKeyEnter = e => {
     if (e.key === 'Enter') {
-      postComment(id, commentInput, () => {
+      e.preventDefault();
+      postComment(id, commentInput, currentUserId, () => {
         setCommentInput('');
         e.target.value = '';
       });
@@ -48,7 +50,7 @@ const Showcasebox = ({
 
   return (
     <Container>
-      <ImageCard thumnail={thumnail} id={tagId} name={tagName} handle={handle} />
+      <ImageCard thumnail={thumnail} id={tagName} name={tagName} handle={handle} />
       <Box>
         <UserInfoSmall id={userId} name={userName} image={userImg} />
         <ContentSummary>{summary}</ContentSummary>
@@ -72,6 +74,12 @@ const Showcasebox = ({
 const Container = styled.div`
   width: 100%;
   margin-bottom: 30px;
+  transition: all 0.3s ease-out;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 1px 1px 10px #aaa;
+  }
 
   & > * {
     margin-bottom: 10px;

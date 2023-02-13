@@ -16,8 +16,6 @@ const useGetUserActivity = (activity, id, page) => {
       .get(url)
       .then(res => {
         const { data, pageInfo } = res.data;
-        console.log(data);
-        console.log(pageInfo);
         setIsLoadingActivity(false);
         setUserContents([...userContents, ...data]);
         setTotalPages(pageInfo);

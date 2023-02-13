@@ -11,12 +11,14 @@ import useIntersect from '../../hooks/useIntersect';
 import useShowcaseModal from '../../store/showcaseModalStore';
 
 const Showcase = () => {
-  const { itemList, isLoading, getItemList, setOffset } = useShowcaseStore();
+  const { itemList, isLoading, getItemList, initializeStore } = useShowcaseStore();
   const { isModalOpen, getModalItem } = useShowcaseModal();
 
   useEffect(() => {
     getItemList(9);
-    return () => setOffset(-1);
+    return () => {
+      initializeStore();
+    };
   }, []);
 
   const ref = useIntersect(async (entry, observer) => {
@@ -37,7 +39,8 @@ const Showcase = () => {
         thumnail={thumbnailUrl}
         tagName={category}
         summary={content}
-        userImg={writer.profileImageUrl}
+        userId={writer.id}
+        userImg={writer.profileUrl}
         userName={writer.nickname}
         commentUserName={lastComment ? lastComment.writer.nickname : null}
         commentContent={lastComment ? lastComment.content : null}

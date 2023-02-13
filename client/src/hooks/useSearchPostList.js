@@ -3,24 +3,26 @@ import { useState, useEffect } from 'react';
 
 /**
  *
- * @param {string} seriesId post를 포함하고 있는 series의 ID
- * @param {string} page post의 갯수
- * @returns {postList[], postPageInfo{}, boolean, boolean}
+ * @param {string} category
+ * @param {number} page
+ * @returns {seriesList[], seriesPageInfo{}, boolean, boolean}
  */
-const useGetSeriesPostList = (seriesId, page = 1) => {
+const useSearchPostList = (query, page = 1) => {
   const [postList, setPostList] = useState([]);
   const [postPageInfo, setPostPageInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingError, setIsLoadingError] = useState(false);
-  //   Series API 명 확인필요
-  const URL = `/series/${seriesId}/posts?page=${page}&size=10&sort=newest`;
+
+  const URL = `posts/search?page=${page}&size=10&query=${query}`;
+
   useEffect(() => {
     setIsLoading(true);
 
     axios
       .get(URL)
-      .then(({ data, pageInfo }) => {
-        setPostList(data.data);
+      .then(res => {
+        const { data, pageInfo } = res.data;
+        setPostList(data);
         setPostPageInfo(pageInfo);
         setIsLoading(false);
       })
@@ -29,9 +31,10 @@ const useGetSeriesPostList = (seriesId, page = 1) => {
         setIsLoading(false);
         setIsLoadingError(true);
       });
-  }, [seriesId]);
+  }, [query, page]);
 
+  // 아직은 seriesList에 seriesListDummy의 값을 넣음
   return { postList, postPageInfo, isLoading, isLoadingError };
 };
 
-export default useGetSeriesPostList;
+export default useSearchPostList;

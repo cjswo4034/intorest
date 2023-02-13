@@ -5,7 +5,7 @@
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
     <property name="CONSOLE_LOG_PATTERN"
-              value=" %clr(%d{yyyy-MM-dd HH:mm:ss.SSS,IST}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%X{logId}]){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-45.45logger{43}[%4L]){cyan} %clr(: ){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value=" %clr(%d{yyyy-MM-dd'T'HH:mm:ss.SSS,Asia/Seoul}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%X{logId}]){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-45.45logger{43}[%4L]){cyan} %clr(: ){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -14,7 +14,7 @@
     </appender>
 
     <springProfile name="!prod">
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="console"/>
         </root>
     </springProfile>
@@ -22,11 +22,11 @@
     <springProfile name="prod">
         <appender name="access" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <filter class="com.codestates.hobby.global.log.AccessLogFilter"/>
-            <file>log/access.log</file>
+            <file>/log/access.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>log/access/%d{yyyy-MM}/access.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <fileNamePattern>/log/access/%d{yyyy-MM}/access.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
                 <maxFileSize>2mb</maxFileSize>
-                <maxHistory>15</maxHistory>
+                <maxHistory>30</maxHistory>
             </rollingPolicy>
             <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
                 <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
@@ -39,10 +39,9 @@
         </appender>
 
         <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <filter class="com.codestates.hobby.global.log.DebugLogFilter"/>
-            <file>log/debug.log</file>
+            <file>/log/debug.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>log/debug/%d{yyyy-MM}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <fileNamePattern>/log/debug/%d{yyyy-MM}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
                 <maxFileSize>2mb</maxFileSize>
                 <maxHistory>15</maxHistory>
             </rollingPolicy>
@@ -51,7 +50,23 @@
             </encoder>
         </appender>
 
+        <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>ERROR</level>
+            </filter>
+            <file>/log/error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>/log/error/%d{yyyy-MM}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                <maxFileSize>2mb</maxFileSize>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            </encoder>
+        </appender>
+
         <root level="INFO">
+            <appender-ref ref="error"/>
             <appender-ref ref="debug"/>
             <appender-ref ref="access"/>
         </root>

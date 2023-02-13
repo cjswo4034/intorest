@@ -3,6 +3,7 @@ name: Deploy server
 on:
   push:
     branches:
+      - 'dev'
       - 'deploy'
   pull_request:
     types:

@@ -12,9 +12,10 @@ import { LabelLarge } from '../../styles/typo';
 const Lnb = ({ currentTab, category = '' }) => {
   const navigate = useNavigate();
 
-  // const tabList = [{ title: 'All' }, { title: 'Posts' }, { title: 'Series' }];
-  const tabList = [{ title: 'Posts' }, { title: 'Series' }];
-
+  const tabList = [
+    { title: 'Posts', id: 'posts' },
+    { title: 'Series', id: 'series' },
+  ];
   const handleTab = tab => {
     navigate(`/${tab}/${category}`);
   };
@@ -24,32 +25,35 @@ const Lnb = ({ currentTab, category = '' }) => {
       <LeftButtonList>
         {tabList.map(el =>
           currentTab === el.title ? (
-            <TabButton key={el.title} clicked onClick={() => handleTab(el.title)}>
+            <TabButton key={el.title} clicked onClick={() => handleTab(el.id)}>
               {el.title}
             </TabButton>
           ) : (
-            <TabButton key={el.title} onClick={() => handleTab(el.title)}>
+            <TabButton key={el.title} onClick={() => handleTab(el.id)}>
               {el.title}
             </TabButton>
           ),
         )}
       </LeftButtonList>
-      <Filter>Filter</Filter>
     </Container>
   );
 };
 
-const LnbSearch = ({ value }) => {
+const LnbSearch = ({ query }) => {
   const navigate = useNavigate();
 
   const [nowTab, SetNowTab] = useState();
 
   // const tabList = [{ title: 'All' }, { title: 'Posts' }, { title: 'Series' }];
-  const tabList = [{ title: 'All' }, { title: 'Posts' }, { title: 'Series' }];
+  const tabList = [
+    { title: 'All', id: `all` },
+    { title: 'Posts', id: 'posts' },
+    { title: 'Series', id: 'series' },
+  ];
 
   const handleTab = tab => {
     SetNowTab(tab);
-    navigate(`?value=${value}&type=${tab}`);
+    navigate(`/search/${tab}?query=${query}&page=1&size=10`);
   };
 
   return (
@@ -57,17 +61,16 @@ const LnbSearch = ({ value }) => {
       <LeftButtonList>
         {tabList.map(el =>
           nowTab === el.title ? (
-            <TabButton key={el.title} clicked onClick={() => handleTab(el.title)}>
+            <TabButton key={el.title} clicked onClick={() => handleTab(el.id)}>
               {el.title}
             </TabButton>
           ) : (
-            <TabButton key={el.title} onClick={() => handleTab(el.title)}>
+            <TabButton key={el.title} onClick={() => handleTab(el.id)}>
               {el.title}
             </TabButton>
           ),
         )}
       </LeftButtonList>
-      <Filter>Filter</Filter>
     </Container>
   );
 };
@@ -87,15 +90,9 @@ const LeftButtonList = styled.div`
   gap: 35px;
 `;
 
-const Filter = styled.button`
-  all: unset;
-  color: var(--gray-900);
-  cursor: pointer;
-`;
-
 const TabButton = styled.button`
   all: unset;
-  color: ${props => (props.clicked ? 'var(--gray-900)' : 'var(--gray-500)')};
+  color: ${props => (props.clicked ? 'var(--orange-400)' : 'var(--gray-500)')};
   cursor: pointer;
 `;
 

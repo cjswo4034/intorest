@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-import useShowcaseCreateStore from '../../store/showcaseCreateStore';
+import useContentCreateStore from '../../store/contentCreateStore';
 import { TAGS } from '../../constants/Categories';
 import { LabelMedium } from '../../styles/typo';
 
-const Dropdown = () => {
-  const { categoryName, setCategoryKey, setCategoryName } = useShowcaseCreateStore();
+const Dropdown = ({ padding }) => {
+  const { categoryName, setCategoryKey, setCategoryName } = useContentCreateStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -17,12 +17,13 @@ const Dropdown = () => {
     setCategoryKey(event.target.getAttribute('data-key'));
     setCategoryName(event.target.textContent);
     setIsOpen(false);
-    console.log(event.target.textContent);
   };
 
   return (
     <Container>
-      <SelectedTagname onClick={toggleOpen}> {categoryName} </SelectedTagname>
+      <SelectedTagname padding={padding} onClick={toggleOpen}>
+        {categoryName}
+      </SelectedTagname>
       {isOpen ? (
         <DropdownListContainer>
           {TAGS.map(el => {
@@ -42,7 +43,7 @@ const Container = styled.div`
   ${LabelMedium};
   cursor: pointer;
   position: relative;
-  z-index: 9999;
+  z-index: 103;
 `;
 
 const DropdownListContainer = styled.ul`
@@ -75,7 +76,7 @@ const SelectedTagname = styled.div`
   color: white;
   background-color: rgba(51, 51, 51, 1);
   box-sizing: border-box;
-  padding: 20px;
+  padding: ${props => props.padding || '20px'};
 `;
 
 export default Dropdown;

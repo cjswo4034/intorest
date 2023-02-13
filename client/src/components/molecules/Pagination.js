@@ -25,7 +25,7 @@ const PageButton = styled.button`
   }
 `;
 
-const Pagination = ({ totalPages }) => {
+const Pagination = ({ totalPages, refreshComment }) => {
   const range = (start, end) => {
     const array = [];
     for (let i = start; i < end; ++i) {
@@ -58,8 +58,6 @@ const Pagination = ({ totalPages }) => {
     }
   }, [searchParams]);
 
-  // const handleClick = (e) => {};
-
   return (
     <div>
       {curPage === 1 ? (
@@ -70,8 +68,9 @@ const Pagination = ({ totalPages }) => {
             setCurPage(curPage - 1);
             searchParams.set('page', curPage - 1);
             setSearchParams(searchParams);
+            refreshComment(curPage - 1);
           }}>
-          prev
+          Prev
         </PageButton>
       )}
 
@@ -81,6 +80,7 @@ const Pagination = ({ totalPages }) => {
           setCurPage(1);
           searchParams.set('page', 1);
           setSearchParams(searchParams);
+          refreshComment(1);
         }}>
         1
       </PageButton>
@@ -96,6 +96,7 @@ const Pagination = ({ totalPages }) => {
               setCurPage(el);
               searchParams.set('page', el);
               setSearchParams(searchParams);
+              refreshComment(el);
             }}>
             {el}
           </PageButton>
@@ -103,17 +104,22 @@ const Pagination = ({ totalPages }) => {
       })}
       {curPage >= totalPages - 2 || totalPages <= 5 ? '' : <PageButton>...</PageButton>}
 
-      <PageButton
-        className={`${curPage === totalPages ? 'focus' : ''} ${totalPages <= 1 ? 'hidden' : ''}`}
-        onClick={() => {
-          setCurPage(totalPages);
-          searchParams.set('page', totalPages);
-          setSearchParams(searchParams);
-        }}>
-        {totalPages}
-      </PageButton>
+      {totalPages <= 1 ? (
+        ''
+      ) : (
+        <PageButton
+          className={`${curPage === Number(totalPages) ? 'focus' : ''} ${totalPages <= 1 ? 'hidden' : ''}`}
+          onClick={() => {
+            setCurPage(totalPages);
+            searchParams.set('page', totalPages);
+            setSearchParams(searchParams);
+            refreshComment(totalPages);
+          }}>
+          {totalPages}
+        </PageButton>
+      )}
 
-      {curPage === totalPages || totalPages <= 1 ? (
+      {curPage === Number(totalPages) || totalPages <= 1 ? (
         ''
       ) : (
         <PageButton
@@ -121,8 +127,9 @@ const Pagination = ({ totalPages }) => {
             setCurPage(curPage + 1);
             searchParams.set('page', curPage + 1);
             setSearchParams(searchParams);
+            refreshComment(curPage + 1);
           }}>
-          next
+          Next
         </PageButton>
       )}
     </div>

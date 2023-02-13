@@ -1,12 +1,18 @@
 import create from 'zustand';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import {
+  SELECT_CATEGORY,
+  EMPTY_CONTENT_ERROR,
+  EMPTY_TITLE_ERROR,
+  MINIMUM_ONE_IMAGE_ERROR,
+} from '../constants/Messages';
 
-const useShowcaseCreateStore = create((set, get) => ({
+const useContentCreateStore = create((set, get) => ({
   // category
-  categoryKey: 'baseball',
+  categoryKey: '',
   categoryName: 'Category',
   setCategoryKey: categoryKey => {
-    console.log(categoryKey);
     set({ categoryKey });
   },
   setCategoryName: categoryName => set({ categoryName }),
@@ -27,9 +33,11 @@ const useShowcaseCreateStore = create((set, get) => ({
     set({ fileInfos });
   },
 
-  // imageBinary
-  imageBinary: '',
-  setImageBinary: imageBinary => set({ imageBinary }),
+  // imageBlob
+  imageBlob: '',
+  setImageBlob: imageBlob => {
+    set({ imageBlob });
+  },
 
   // error handle
   errorMessage: '',
@@ -70,21 +78,37 @@ const useShowcaseCreateStore = create((set, get) => ({
 
   uploadToGCS: async sigendURL => {
     // 블롭을 리턴
-    const { imageBinary, fileInfos } = get();
+    const { imageBlob } = get();
 
-    const response = await axios.put(sigendURL, imageBinary, {
+    const response = await axios.put(sigendURL, imageBlob, {
       headers: {
-        'Content-Type': `image/${fileInfos.contentType}`,
+        'Content-Type': `${imageBlob.type}`,
+        authorization: null,
       },
       withCredentials: false,
     });
 
     return response;
   },
-  postShowcase: async () => {
+  postShowcase: async callback => {
     const { categoryKey, content, fileInfos, uploadToGCS } = get();
     try {
       // showcases 로 게시물 업로드
+      if (categoryKey === '') {
+        Swal.fire({ title: SELECT_CATEGORY, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      if (content === '') {
+        Swal.fire({ title: EMPTY_CONTENT_ERROR, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      if (fileInfos.length === 0) {
+        Swal.fire({ title: MINIMUM_ONE_IMAGE_ERROR, confirmButtonColor: 'Orange' });
+        return;
+      }
+
       const body = {
         content,
         category: categoryKey,
@@ -96,39 +120,51 @@ const useShowcaseCreateStore = create((set, get) => ({
           'Content-Type': 'application/json',
         },
       });
-      // 업로드된 시점에서
-      console.log('쇼케이스 업로드 1차 통과');
-      console.log(response);
 
       // signedURL 을 받아왔다면 해당 URL로 PUT 요청 보내기
       const { signedURL } = response.data.fileInfos[0];
-      console.log(`signedURL: ${signedURL}`);
 
       await uploadToGCS(signedURL);
-      console.log('쇼케이스 업로드 2차 통과');
-
-      console.log('showcase 업로드 성공');
+      callback();
     } catch (error) {
       set({ errorMessage: error });
-      console.log('showcase 업로드 실패');
-      console.log(error);
     }
   },
 
-  postSeries: async () => {
+  postSeries: async callback => {
     const { categoryKey, title, content, fileInfos, getPresignedURL, uploadToGCS } = get();
 
     try {
-      const { fileURL, signedURL } = getPresignedURL('series', fileInfos.size, fileInfos.contentType);
-      await uploadToGCS(signedURL);
+      if (categoryKey === '') {
+        Swal.fire({ title: SELECT_CATEGORY, confirmButtonColor: 'Orange' });
+        return;
+      }
 
-      const response = await axios.post(
-        '/showcases',
+      if (title === '') {
+        Swal.fire({ title: EMPTY_TITLE_ERROR, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      if (content === '') {
+        Swal.fire({ title: EMPTY_CONTENT_ERROR, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      if (fileInfos.length === 0) {
+        Swal.fire({ title: MINIMUM_ONE_IMAGE_ERROR, confirmButtonColor: 'Orange' });
+        return;
+      }
+
+      const reponsePresigned = await getPresignedURL('series', fileInfos[0].size, fileInfos[0].contentType);
+      const { fileURL, signedURL } = reponsePresigned;
+      await uploadToGCS(signedURL);
+      await axios.post(
+        '/series',
         {
           category: categoryKey,
           title,
           content,
-          thumnail: fileURL,
+          thumbnail: fileURL,
         },
         {
           headers: {
@@ -136,11 +172,12 @@ const useShowcaseCreateStore = create((set, get) => ({
           },
         },
       );
-      console.log(response.data);
     } catch (errorMessage) {
+      console.log(errorMessage);
       set({ errorMessage });
     }
+    callback();
   },
 }));
 
-export default useShowcaseCreateStore;
+export default useContentCreateStore;

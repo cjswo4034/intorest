@@ -3,6 +3,7 @@ import { useState } from 'react';
 import useCommentAPI from '../../../hooks/useCommentAPI';
 import { UserInfoSmall } from '../UserInfo';
 import Input from '../../atoms/Input';
+import useAuthStore from '../../../store/useAuthStore';
 
 const Container = styled.div`
   display: flex;
@@ -44,18 +45,19 @@ const CommentButton = styled.button`
   }
 `;
 
-const Comment = ({ basePath, comment }) => {
+const Comment = ({ basePath, contentId, comment, callback }) => {
   const { content, id, writer } = comment;
   const [editMode, setEditMode] = useState(false);
   const [editContent, setEditContent] = useState(content);
-  const { deleteComment, postComment } = useCommentAPI();
+  const { deleteComment, patchComment } = useCommentAPI();
+  const { currentUserId } = useAuthStore();
 
   const onClickEditComment = () => {
     setEditMode(!editMode);
   };
 
   const onClickDeleteComment = () => {
-    deleteComment(basePath, id);
+    deleteComment(basePath, contentId, id, callback);
   };
 
   const onChangeContent = e => {
@@ -65,23 +67,14 @@ const Comment = ({ basePath, comment }) => {
 
   // CommentInputContainer 에 있는 submit 형태로 수정 해보기
   const onClickCommentSubmit = () => {
-    setEditMode(!editMode);
-    postComment(basePath, id, editContent);
+    patchComment(basePath, contentId, id, editContent, () => setEditMode(!editMode));
   };
 
-  return (
-    <Container>
-      <InfoContainer>
-        <UserInfoSmall id={writer.id} name={writer.nickname} image={writer.profileImageUrl} />
-      </InfoContainer>
-      <CommentContainer>
-        {!editMode ? (
-          editContent
-        ) : (
-          <Input value={editContent} onChange={onChangeContent} width="85%" height="50px" placeholder="댓글 달기" />
-        )}
-      </CommentContainer>
-      {!editMode ? (
+  const renderWriterButton = () => {
+    if (currentUserId !== writer.id) return null;
+
+    if (!editMode) {
+      return (
         <InfoContainer>
           <CommentButton type="button" onClick={onClickEditComment}>
             Edit
@@ -90,16 +83,34 @@ const Comment = ({ basePath, comment }) => {
             Delete
           </CommentButton>
         </InfoContainer>
-      ) : (
-        <InfoContainer>
-          <CommentButton type="button" onClick={onClickCommentSubmit}>
-            Cancel
-          </CommentButton>
-          <CommentButton type="button" onClick={onClickCommentSubmit}>
-            Submit
-          </CommentButton>
-        </InfoContainer>
-      )}
+      );
+    }
+
+    return (
+      <InfoContainer>
+        <CommentButton type="button" onClick={onClickCommentSubmit}>
+          Cancel
+        </CommentButton>
+        <CommentButton type="button" onClick={onClickCommentSubmit}>
+          Submit
+        </CommentButton>
+      </InfoContainer>
+    );
+  };
+
+  return (
+    <Container>
+      <InfoContainer>
+        <UserInfoSmall id={writer.id} name={writer.nickname} image={writer.profileUrl} />
+      </InfoContainer>
+      <CommentContainer>
+        {!editMode ? (
+          editContent
+        ) : (
+          <Input value={editContent} onChange={onChangeContent} width="85%" height="50px" placeholder="댓글 달기" />
+        )}
+      </CommentContainer>
+      {renderWriterButton()}
     </Container>
   );
 };

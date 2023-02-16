@@ -19,7 +19,7 @@ import com.codestates.hobby.domain.showcase.mapper.ShowcaseMapper;
 import com.codestates.hobby.domain.showcase.service.ShowcaseService;
 import com.codestates.hobby.domain.stub.FileInfoStub;
 import com.codestates.hobby.domain.stub.ShowcaseStub;
-import com.codestates.hobby.global.config.support.InfiniteScrollRequest;
+import com.codestates.hobby.global.support.resolver.InfiniteScrollRequest;
 import com.codestates.hobby.utils.ControllerTest;
 
 @WebMvcTest({ShowcaseController.class})

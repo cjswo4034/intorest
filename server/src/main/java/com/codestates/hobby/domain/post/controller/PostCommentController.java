@@ -2,10 +2,9 @@ package com.codestates.hobby.domain.post.controller;
 
 import com.codestates.hobby.domain.member.entity.Member;
 import com.codestates.hobby.domain.post.dto.PostCommentDto;
-import com.codestates.hobby.domain.post.entity.PostComment;
 import com.codestates.hobby.domain.post.mapper.PostCommentMapper;
 import com.codestates.hobby.domain.post.service.PostCommentService;
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

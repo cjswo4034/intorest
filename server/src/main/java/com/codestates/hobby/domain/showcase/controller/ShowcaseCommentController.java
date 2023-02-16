@@ -18,7 +18,7 @@ import com.codestates.hobby.domain.showcase.dto.ShowcaseCommentDto;
 import com.codestates.hobby.domain.showcase.entity.ShowcaseComment;
 import com.codestates.hobby.domain.showcase.mapper.ShowcaseCommentMapper;
 import com.codestates.hobby.domain.showcase.service.ShowcaseCommentService;
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 
 import lombok.RequiredArgsConstructor;

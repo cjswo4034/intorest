@@ -10,8 +10,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.codestates.hobby.domain.fileInfo.support.BasePathConverter;
-import com.codestates.hobby.global.config.support.InfiniteScrollArgumentResolver;
-import com.codestates.hobby.global.config.support.PagingArgumentResolver;
+import com.codestates.hobby.global.support.resolver.InfiniteScrollArgumentResolver;
+import com.codestates.hobby.global.support.resolver.PagingArgumentResolver;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

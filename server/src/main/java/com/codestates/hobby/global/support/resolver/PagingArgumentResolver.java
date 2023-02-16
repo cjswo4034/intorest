@@ -1,6 +1,4 @@
-package com.codestates.hobby.global.config.support;
-
-import static org.springframework.util.StringUtils.*;
+package com.codestates.hobby.global.support.resolver;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.core.MethodParameter;

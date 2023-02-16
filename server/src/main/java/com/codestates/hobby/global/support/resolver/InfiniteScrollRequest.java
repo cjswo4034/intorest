@@ -1,4 +1,4 @@
-package com.codestates.hobby.global.config.support;
+package com.codestates.hobby.global.support.resolver;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

@@ -1,4 +1,4 @@
-package com.codestates.hobby.global.support.mail;
+package com.codestates.hobby.global.infra.mail;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

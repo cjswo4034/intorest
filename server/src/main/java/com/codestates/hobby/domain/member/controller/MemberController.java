@@ -5,7 +5,7 @@ import com.codestates.hobby.domain.member.entity.Member;
 import com.codestates.hobby.domain.member.mapper.MemberMapper;
 import com.codestates.hobby.domain.member.service.MemberService;
 
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 import com.codestates.hobby.global.exception.BusinessLogicException;
 import com.codestates.hobby.global.exception.ExceptionCode;

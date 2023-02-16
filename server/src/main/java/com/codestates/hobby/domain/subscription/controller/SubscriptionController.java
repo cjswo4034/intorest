@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 
 import lombok.RequiredArgsConstructor;
 

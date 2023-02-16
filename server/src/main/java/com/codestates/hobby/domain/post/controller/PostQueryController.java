@@ -4,7 +4,7 @@ import com.codestates.hobby.domain.post.dto.PostDto;
 import com.codestates.hobby.domain.post.entity.Post;
 import com.codestates.hobby.domain.post.mapper.PostMapper;
 import com.codestates.hobby.domain.post.service.PostService;
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

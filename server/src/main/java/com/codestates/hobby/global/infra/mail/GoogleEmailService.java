@@ -1,4 +1,4 @@
-package com.codestates.hobby.global.support.mail;
+package com.codestates.hobby.global.infra.mail;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

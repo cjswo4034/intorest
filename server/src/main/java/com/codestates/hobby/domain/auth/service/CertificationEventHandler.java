@@ -7,7 +7,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.codestates.hobby.domain.auth.dto.CertificationCreatedEvent;
-import com.codestates.hobby.global.support.mail.EmailService;
+import com.codestates.hobby.global.infra.mail.EmailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

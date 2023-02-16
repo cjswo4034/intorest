@@ -21,7 +21,7 @@ import com.codestates.hobby.domain.showcase.dto.ShowcaseDto;
 import com.codestates.hobby.domain.showcase.entity.Showcase;
 import com.codestates.hobby.domain.showcase.repository.ShowcaseCommentRepository;
 import com.codestates.hobby.domain.showcase.repository.ShowcaseRepository;
-import com.codestates.hobby.global.config.support.InfiniteScrollRequest;
+import com.codestates.hobby.global.support.resolver.InfiniteScrollRequest;
 import com.codestates.hobby.global.exception.BusinessLogicException;
 import com.codestates.hobby.global.exception.ExceptionCode;
 

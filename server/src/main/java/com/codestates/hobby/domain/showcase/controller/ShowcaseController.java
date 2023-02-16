@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.codestates.hobby.domain.member.entity.Member;
 import com.codestates.hobby.domain.showcase.dto.ShowcaseDto;
 import com.codestates.hobby.domain.showcase.entity.Showcase;
 import com.codestates.hobby.domain.showcase.mapper.ShowcaseMapper;
 import com.codestates.hobby.domain.showcase.service.ShowcaseService;
-import com.codestates.hobby.global.config.support.InfiniteScrollRequest;
+import com.codestates.hobby.global.support.resolver.InfiniteScrollRequest;
 import com.codestates.hobby.global.dto.InfinitePageInfo;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 

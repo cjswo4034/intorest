@@ -7,7 +7,7 @@ import com.codestates.hobby.domain.series.entity.Series;
 import com.codestates.hobby.domain.series.mapper.SeriesMapper;
 import com.codestates.hobby.domain.series.service.SeriesService;
 
-import com.codestates.hobby.global.config.support.CustomPageRequest;
+import com.codestates.hobby.global.support.resolver.CustomPageRequest;
 import com.codestates.hobby.global.dto.MultiResponseDto;
 
 import lombok.RequiredArgsConstructor;
